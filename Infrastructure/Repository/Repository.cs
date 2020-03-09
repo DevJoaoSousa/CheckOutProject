@@ -31,11 +31,13 @@ namespace Infrastructure.Repository
             var commandProcessPayment = RepositoryCommands.ProcessPayment;
             var args = new
             {
-                CardNum = payment.CardNumber,
+                MaskedNumb = payment.MaskedNumber,
                 ExpiryDat = payment.ExpiryDate,
                 AmountPay = payment.Amount,
                 Cur = payment.Currency,
-                Cvv = payment.CVV
+                Cvv = payment.CVV,
+                GeneratedId = payment.Guid,
+                Stat = payment.Status
             };
 
             using (var connection = _connectionFactory.Create())

@@ -1,6 +1,8 @@
-﻿using Domain.Entities;
+﻿using BankService;
+using Domain.Entities;
 using Infrastructure.Factory;
 using Infrastructure.Repository;
+using Services.Utils;
 using System;
 using System.Collections.Generic;
 
@@ -8,11 +10,13 @@ namespace Services
 {
     public class CustomerService : ICustomerService
     {
+        private readonly IBankService _bankservice;
         private readonly IRepository _repository;
 
-        public CustomerService(IRepository repository)
+        public CustomerService(IRepository repository, IBankService bankService)
         {
             _repository = repository;
+            _bankservice = bankService;
         }
 
         public IEnumerable<PaymentProcess> GetAllPayments()
@@ -20,19 +24,18 @@ namespace Services
             return _repository.GetAllPayments();
         }
 
-        /// <summary>
-        /// Not allow negative amounts and expiry dates longer than actual time
-        /// </summary>
-        /// <param name="payment"></param>
-        /// <returns></returns>
-        public bool ValidateProcess(PaymentProcess payment)
-        {
-            return payment.Amount < 0 || payment.ExpiryDate < DateTime.UtcNow ? false : true;
-        }
 
         public void ProcessPayment(PaymentProcess payment)
         {
+            var response = _bankservice.ProcessPayment(payment);
+
+            payment.Status = response.ResponseStatus.ToString();
+            payment.Guid = response.Guid.ToString();
+            payment.MaskedNumber = MaskingCardNumber.Mask(payment.CardNumber.ToString(), 0, 12);
+
             _repository.ProcessPayment(payment);
         }
+
     }
 }
+

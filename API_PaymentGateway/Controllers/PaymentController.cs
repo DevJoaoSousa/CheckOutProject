@@ -11,10 +11,12 @@ namespace API_PaymentGateway.Controllers
     public class PaymentController : ControllerBase
     {
         private readonly ICustomerService _customerService;
+        private readonly IValidationService _validationService;
 
-        public PaymentController(ICustomerService service)
+        public PaymentController(ICustomerService customerService, IValidationService validationService)
         {
-            _customerService = service;
+            _customerService = customerService;
+            _validationService = validationService;
         }
 
         [HttpGet]
@@ -35,7 +37,7 @@ namespace API_PaymentGateway.Controllers
         [Route("api/processPayment")]
         public ActionResult ProcessPayment([FromBody] PaymentProcess payment)
         {
-            if (payment == null || _customerService.ValidateProcess(payment) == false)
+            if (payment == null || _validationService.ValidateProcess(payment) == false)
             {
                 return NotFound();
             }

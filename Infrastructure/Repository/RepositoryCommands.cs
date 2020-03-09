@@ -9,16 +9,20 @@ namespace Infrastructure.Repository
         internal static string GetAllPayments = "SELECT * FROM PaymentsProcess";
         internal static string ProcessPayment =
             "INSERT INTO[PaymentsProcess]" +
-                "([CardNumber]" +
+                "([MaskedNumber]" +
                 ",[ExpiryDate]" +
                 ",[Amount]" +
                 ",[Currency]" +
-                ",[CVV]) " +
+                ",[CVV] " +
+                ",[Guid]" +
+                ",[Status]) " +
             "VALUES " +
-                "(@CardNum " +
+                "(@MaskedNumb " +
                 ",@ExpiryDat " +
                 ",@AmountPay " +
                 ",@Cur " +
-                ",@Cvv)";
+                ",@Cvv" +
+                ",@GeneratedId" +
+                ",@Stat)";
     }
 }

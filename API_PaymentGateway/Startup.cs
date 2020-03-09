@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Infrastructure.Factory;
 using Infrastructure.Repository;
+using BankService;
 
 namespace API_PaymentGateway
 {
@@ -40,6 +41,8 @@ namespace API_PaymentGateway
             });
 
             services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IValidationService, ValidationService>();
+            services.AddScoped<IBankService, BankServiceMock>();
             services.AddScoped<IConnectionFactory, ConnectionFactory>();
             services.AddScoped<IRepository, Repository>();
 
