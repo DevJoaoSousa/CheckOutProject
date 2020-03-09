@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Infrastructure;
+using Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,6 +13,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Infrastructure.Factory;
+using Infrastructure.Repository;
 
 namespace API_PaymentGateway
 {
@@ -25,9 +29,7 @@ namespace API_PaymentGateway
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddControllers();
-
+        {            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo 
@@ -36,6 +38,12 @@ namespace API_PaymentGateway
                     Version = "v1" 
                 });
             });
+
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IConnectionFactory, ConnectionFactory>();
+            services.AddScoped<IRepository, Repository>();
+
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
