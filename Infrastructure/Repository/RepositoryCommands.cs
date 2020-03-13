@@ -9,7 +9,8 @@ namespace Infrastructure.Repository
         internal static string GetAllPayments = "SELECT * FROM PaymentsProcess";
         internal static string ProcessPayment =
             "INSERT INTO[PaymentsProcess]" +
-                "([MaskedNumber]" +
+                "([CardName]" +
+                ",[MaskedNumber]" +
                 ",[ExpiryDate]" +
                 ",[Amount]" +
                 ",[Currency]" +
@@ -17,7 +18,8 @@ namespace Infrastructure.Repository
                 ",[Guid]" +
                 ",[Status]) " +
             "VALUES " +
-                "(@MaskedNumb " +
+                "(@CardN" +
+                ",@MaskedNumb " +
                 ",@ExpiryDat " +
                 ",@AmountPay " +
                 ",@Cur " +

@@ -31,6 +31,7 @@ namespace Infrastructure.Repository
             var commandProcessPayment = RepositoryCommands.ProcessPayment;
             var args = new
             {
+                CardN = payment.CardName,
                 MaskedNumb = payment.MaskedNumber,
                 ExpiryDat = payment.ExpiryDate,
                 AmountPay = payment.Amount,

@@ -1,23 +1,21 @@
-﻿using Domain.Entities;
+﻿using BankService.Factory;
+using Domain.Entities;
 using System;
 
 namespace BankService
 {
     public class BankServiceMock : IBankService
     {
-        public ResponseModel ProcessPayment(PaymentProcess payment)
-        {
-            var response = new ResponseModel();
+        private readonly IResponseFactory _responseFactory;
 
-            response.ResponseStatus = ResponseType.Success;
-            response.Guid = Guid.NewGuid();
-            
-            return response;
+        public BankServiceMock(IResponseFactory responseFactory)
+        {
+            _responseFactory = responseFactory;
         }
 
-        private bool ValidateCardDetails(PaymentProcess payment)
+        public ResponseModel ProcessPayment(PaymentProcess payment)
         {
-            return payment.Amount < 0 || payment.ExpiryDate < DateTime.UtcNow ? false : true;
+            return _responseFactory.create();
         }
     }
 }

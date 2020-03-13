@@ -16,11 +16,13 @@ using Microsoft.OpenApi.Models;
 using Infrastructure.Factory;
 using Infrastructure.Repository;
 using BankService;
+using BankService.Factory;
 
 namespace API_PaymentGateway
 {
     public class Startup
     {
+        const string CorsAllowAllOrigins = "AllOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -30,7 +32,7 @@ namespace API_PaymentGateway
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {            
+        {   
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo 
@@ -40,10 +42,23 @@ namespace API_PaymentGateway
                 });
             });
 
+            services
+                .AddCors(options =>
+                {
+                    options.AddPolicy(CorsAllowAllOrigins,
+                    builder => builder.WithOrigins("*").WithHeaders("*").WithMethods("*").WithExposedHeaders("*"));
+                });
+
+            //Factories
+            services.AddScoped<IConnectionFactory, ConnectionFactory>();
+            services.AddScoped<IResponseFactory, ResponseFactory>();
+
+            //Services
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IValidationService, ValidationService>();
             services.AddScoped<IBankService, BankServiceMock>();
-            services.AddScoped<IConnectionFactory, ConnectionFactory>();
+
+            //Repositories
             services.AddScoped<IRepository, Repository>();
 
             services.AddControllers();
@@ -69,6 +84,8 @@ namespace API_PaymentGateway
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors(CorsAllowAllOrigins);
 
             app.UseEndpoints(endpoints =>
             {

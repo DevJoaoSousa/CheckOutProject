@@ -6,6 +6,7 @@ namespace Domain.Entities
 {
     public class PaymentProcess
     {
+        public string CardName { get; set; }
         public long CardNumber { get; set; }
         public string MaskedNumber { get; set; }
         public DateTime ExpiryDate { get; set; }
